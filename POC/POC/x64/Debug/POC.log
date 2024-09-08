@@ -1,0 +1,3 @@
+﻿  POC.cpp
+C:\Users\paulj\Desktop\D_RACE\POC\POC\POC.cpp(59,52): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+  POC.vcxproj -> C:\Users\paulj\Desktop\D_RACE\POC\x64\Debug\POC.exe
