@@ -1,0 +1,3 @@
+﻿  app_windows.cpp
+C:\Users\paulj\Desktop\D_RACE\app_windows\app_windows\app_windows.cpp(59,52): warning C4267: 'argument' : conversion de 'size_t' en 'int', perte possible de données
+  app_windows.vcxproj -> C:\Users\paulj\Desktop\D_RACE\app_windows\x64\Debug\app_windows.exe

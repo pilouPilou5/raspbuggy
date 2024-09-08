@@ -22,8 +22,8 @@ int main()
     }
 
     //create UDP socket
-    std::string hostname{ "192.0.0.1" };
-    uint16_t port = 9000;
+    std::string hostname{ "192.168.207.255" };
+    uint16_t port = 2000;
 
     SOCKET sock = ::socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (sock == INVALID_SOCKET) {
@@ -49,10 +49,10 @@ int main()
         error = XInputGetState(0, &state);
         if (error == ERROR_SUCCESS) {
             joystick = state.Gamepad.sThumbLX;
-            joystick = (joystick + 32768) * 35 / 32767 + 55;
+            joystick = (joystick + 32768) * 90 / 32767;     //processing joystick and trigger informations to be between 0 and 180 (standard for servos)
             left_trigger = state.Gamepad.bLeftTrigger;
             right_trigger = state.Gamepad.bRightTrigger;
-            trigger = (right_trigger - left_trigger + 256) * 35 / 255 + 55;
+            trigger = (right_trigger - left_trigger + 256) * 90 / 255;
 
             cout << "left trigger : " << (int)left_trigger << "    right trigger : " << (int)right_trigger << "   joystick : " << joystick << endl;
             sprintf_s(buf, 100, "%d,%d\n", trigger, joystick);
@@ -64,5 +64,6 @@ int main()
                 return 1;
             }
         }
+        Sleep(100);
     }
 }
