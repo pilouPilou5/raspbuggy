@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\paulj\\Desktop\\D_RACE\\app_windows\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F97AD408-20D2-40FA-BF37-557F1D8771A9}|app_windows\\app_windows.vcxproj|C:\\Users\\paulj\\Desktop\\D_RACE\\app_windows\\app_windows\\app_windows.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{F97AD408-20D2-40FA-BF37-557F1D8771A9}|app_windows\\app_windows.vcxproj|solutionrelative:app_windows\\app_windows.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "app_windows.cpp",
+              "DocumentMoniker": "C:\\Users\\paulj\\Desktop\\D_RACE\\app_windows\\app_windows\\app_windows.cpp",
+              "RelativeDocumentMoniker": "app_windows\\app_windows.cpp",
+              "ToolTip": "C:\\Users\\paulj\\Desktop\\D_RACE\\app_windows\\app_windows\\app_windows.cpp",
+              "RelativeToolTip": "app_windows\\app_windows.cpp",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-09-08T12:38:24.897Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
