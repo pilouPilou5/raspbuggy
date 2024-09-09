@@ -38,25 +38,26 @@ int main()
     destination.sin_addr.s_addr = inet_addr(hostname.c_str());
 
 
-    char* buf = (char*)malloc(100 * sizeof(char));
+    float buf[2];
     XINPUT_STATE state;
     short joystick;
     BYTE left_trigger, right_trigger;
-    int trigger;
+    float motor, servo;
     int error;
     int bytes_sent;
     while (1) {
         error = XInputGetState(0, &state);
         if (error == ERROR_SUCCESS) {
             joystick = state.Gamepad.sThumbLX;
-            joystick = (joystick + 32768) * 90 / 32767;     //processing joystick and trigger informations to be between 0 and 180 (standard for servos)
+            servo = joystick / 32768.;     //processing motor and servo commands to be between -1 and 1
             left_trigger = state.Gamepad.bLeftTrigger;
             right_trigger = state.Gamepad.bRightTrigger;
-            trigger = (right_trigger - left_trigger + 256) * 90 / 255;
-
-            cout << "left trigger : " << (int)left_trigger << "    right trigger : " << (int)right_trigger << "   joystick : " << joystick << endl;
-            sprintf_s(buf, 100, "%d,%d\n", trigger, joystick);
-            bytes_sent = ::sendto(sock, buf, strlen(buf), 0, reinterpret_cast<sockaddr*>(&destination), sizeof(destination));
+            motor = (right_trigger - left_trigger) / 255.;
+            //cout << "left trigger : " << (int)left_trigger << "    right trigger : " << (int)right_trigger << "   joystick : " << joystick << endl;
+            cout << "motor : " << motor << "    servo : " << servo << endl;
+            buf[0] = motor;
+            buf[1] = servo;
+            bytes_sent = ::sendto(sock, (char*)buf, 2*sizeof(float), 0, reinterpret_cast<sockaddr*>(&destination), sizeof(destination));
             if (bytes_sent == SOCKET_ERROR) {
                 wprintf(L"sendto failed with error: %d\n", WSAGetLastError());
                 closesocket(sock);
