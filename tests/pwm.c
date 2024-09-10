@@ -31,9 +31,9 @@ void set_servo_angle(struct gpiod_line *line, int angle) {
 
     // Generate the PWM signal
     gpiod_line_set_value(line, 1);  // Set the GPIO pin high
-    usleep_wrapper(pulse_width);    // Wait for the pulse width time (high period)
+    usleep(pulse_width);    // Wait for the pulse width time (high period)
     gpiod_line_set_value(line, 0);  // Set the GPIO pin low
-    usleep_wrapper(PWM_PERIOD - pulse_width);  // Wait for the remaining period time (low period)
+    usleep(PWM_PERIOD - pulse_width);  // Wait for the remaining period time (low period)
 }
 
 int main() {
