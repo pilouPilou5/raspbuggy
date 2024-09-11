@@ -12,22 +12,14 @@
 #define CHIP "/dev/gpiochip4"
 #define LINE 13  // GPIO pin number
 
-// Sleep for a specific number of microseconds
-void usleep_wrapper(long us) {
-    struct timespec req, rem;
-    req.tv_sec = us / 1000000;
-    req.tv_nsec = (us % 1000000) * 1000;
-    nanosleep(&req, &rem);
-}
+// Set the servo input
+void set_servo(struct gpiod_line *line, float input) {
+    // Ensure the input is within the 0 to 180 degree range
+    if (input < -1) input = -1;
+    if (input > 1) input = 1;
 
-// Set the servo angle
-void set_servo_angle(struct gpiod_line *line, int angle) {
-    // Ensure the angle is within the 0 to 180 degree range
-    if (angle < 0) angle = 0;
-    if (angle > 180) angle = 180;
-
-    // Calculate the pulse width for the given angle
-    int pulse_width = SERVO_MIN_PULSE + (angle * (SERVO_MAX_PULSE - SERVO_MIN_PULSE) / 180);
+    // Calculate the pulse width for the given input
+    int pulse_width = SERVO_MIN_PULSE + ((input+1) * (SERVO_MAX_PULSE - SERVO_MIN_PULSE) / 2);
 
     // Generate the PWM signal
     gpiod_line_set_value(line, 1);  // Set the GPIO pin high
@@ -36,7 +28,7 @@ void set_servo_angle(struct gpiod_line *line, int angle) {
     usleep(PWM_PERIOD - pulse_width);  // Wait for the remaining period time (low period)
 }
 
-int main() {
+int main(int argc, char** argv) {
     struct gpiod_chip *chip;
     struct gpiod_line *line;
     int ret;
@@ -63,20 +55,12 @@ int main() {
         gpiod_chip_close(chip);
         return 1;
     }
-
+    float input;
+    sscanf(argv[1], "%f", &input);
+    //printf("%f", input);
     // Loop to move the servo
     while (1) {
-        // Sweep from 0 to 180 degrees
-        for (int angle = 0; angle <= 180; angle += 10) {
-            set_servo_angle(line, angle);
-            usleep_wrapper(500000);  // Wait 0.5 seconds between steps
-        }
-
-        // Sweep back from 180 to 0 degrees
-        for (int angle = 180; angle >= 0; angle -= 10) {
-            set_servo_angle(line, angle);
-            usleep_wrapper(500000);  // Wait 0.5 seconds between steps
-        }
+        set_servo(line, input);
     }
 
     // Release the line and close the chip
