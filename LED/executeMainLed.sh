@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /home/pi/Documents/NeoSPI
+cd /home/pi/Documents/VroumVroum/D_RACE/LED/NeoSPI
 BUILDDIR="NeoSPI_obj"
 
 # Exécution de la commande meson setup
@@ -21,6 +21,6 @@ fi
 
 echo "Build successful!"
 echo " start of main" 
-"$BUILDDIR"/example/standarttest /dev/spidev1.0
+"$BUILDDIR"/example/standarttest2 
 
 
