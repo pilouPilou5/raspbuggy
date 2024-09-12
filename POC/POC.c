@@ -26,15 +26,14 @@
 
 // Define the servo min and max pulse lengths in microseconds
 #define SERVO_MIN_PULSE 1000  // 1 ms (0 degrees)
-#define SERVO_MAX_PULSE 2000  // 2 ms (180 degrees)
-#define PWM_PERIOD 20000      // 20 ms (50 Hz)
+#define SERVO_MAX_PULSE 1900  // 2 ms (180 degrees)
+#define PWM_PERIOD 19900      // 20 ms (50 Hz)
 
 // Set up the chip and line you want to use for controlling the servo
 #define CHIP "/dev/gpiochip4"
-#define LINE 13  // GPIO pin number
 
 // Set the servo input
-void setServo(struct gpiod_line *line, float input) {
+void sendPWM(struct gpiod_line *line, float input) {
     // Ensure the input is within the 0 to 180 degree range
     if (input < -1) input = -1;
     if (input > 1) input = 1;
@@ -47,6 +46,44 @@ void setServo(struct gpiod_line *line, float input) {
     usleep(pulse_width);    // Wait for the pulse width time (high period)
     gpiod_line_set_value(line, 0);  // Set the GPIO pin low
     usleep(PWM_PERIOD - pulse_width);  // Wait for the remaining period time (low period)
+}
+
+void *motorControl(void* p) {
+    struct gpiod_chip *chip;
+    struct gpiod_line *line;
+    int ret;
+    float* input = (float*)p;
+
+    // Open the GPIO chip
+    chip = gpiod_chip_open(CHIP);
+    if (!chip) {
+        perror("gpiod_chip_open");
+        pthread_exit(0);
+    }
+
+    // Get the GPIO line
+    line = gpiod_chip_get_line(chip, 12);
+    if (!line) {
+        perror("gpiod_chip_get_line");
+        gpiod_chip_close(chip);
+        pthread_exit(0);
+    }
+
+    // Request the line as output
+    ret = gpiod_line_request_output(line, "servo-control", 0);
+    if (ret < 0) {
+        perror("gpiod_line_request_output");
+        gpiod_chip_close(chip);
+        pthread_exit(0);
+    }
+    // Loop to move the servo
+    while (1) {
+        sendPWM(line, *input);
+    }
+
+    // Release the line and close the chip
+    gpiod_line_release(line);
+    gpiod_chip_close(chip);
 }
 
 void *servoControl(void* p) {
@@ -63,7 +100,7 @@ void *servoControl(void* p) {
     }
 
     // Get the GPIO line
-    line = gpiod_chip_get_line(chip, LINE);
+    line = gpiod_chip_get_line(chip, 13);
     if (!line) {
         perror("gpiod_chip_get_line");
         gpiod_chip_close(chip);
@@ -79,7 +116,7 @@ void *servoControl(void* p) {
     }
     // Loop to move the servo
     while (1) {
-        setServo(line, *input);
+        sendPWM(line, *input);
     }
 
     // Release the line and close the chip
@@ -88,7 +125,7 @@ void *servoControl(void* p) {
 }
 
 void main( int argc, char **argv) {
-    pthread_t th;
+    pthread_t th1, th2;
 
 
     // Check the number of arguments : "POC port_no"
@@ -128,7 +165,8 @@ void main( int argc, char **argv) {
     *servo = 0;
     char servo_str[100];
     //int pipe = open("/tmp/pipe", O_WRONLY);
-    int ret = pthread_create (&th, NULL, servoControl, (void *)servo) ;
+    pthread_create (&th1, NULL, servoControl, (void *)servo) ;
+    pthread_create (&th2, NULL, motorControl, (void *)motor) ;
     //printf ("Server started\n\n");
     do {
         // Read string from client through the dialogue socket
