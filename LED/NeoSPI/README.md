@@ -3,6 +3,17 @@ A simplistic C++ SPI NeoPixel driver that works on any linux device with SPI
 
 - to compile run `meson setup <builddir>` and afterwards `ninja -C <builddir>`
 - run example: `<builddir>/example/standarttest /dev/spidev0.0`
+- change /boot/firmware/config.txt add:
+
+########
+dtparam=spi=on
+
+# Activer SPI1 (spidev1.0 et spidev1.1)
+dtoverlay=spi1-1cs
+
+# Activer SPI1 (spidev1.0 et spidev1.1)
+dtoverlay=spi0-1cs
+#######
 
 - Troubleshooting
 	- Currently this library doesn't work on a Raspberry Pi 4 (tested and working on the Raspberry Pi 5 currently unknown if it works on the Raspberry Pi 3 and earlier)
