@@ -10,7 +10,6 @@ fi
 PORT=$1
 
 # Execute the GStreamer pipeline
-gst-launch-1.0 udpsrc port=$PORT ! \
-    application/x-rtp,encoding-name=JPEG ! \
-    rtpjpegdepay ! jpegdec ! queue ! \
-    autovideosink
+gst-launch-1.0 udpsrc port=$PORT caps="application/x-rtp, media=(string)video, encoding-name=(string)JPEG" ! \
+    rtpjpegdepay ! jpegdec ! videoconvert ! queue ! autovideosink
+
