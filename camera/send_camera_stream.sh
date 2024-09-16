@@ -11,14 +11,10 @@ IP_ADDRESS=$1
 PORT=$2
 
 # Execute the GStreamer pipeline
-
-echo " START STREAMING "
+echo "START STREAMING"
 
 gst-launch-1.0 libcamerasrc ! \
-    video/x-raw,format=RGB,width=640,height=480,framerate=30/1 ! \
-    clockoverlay time-format="%D %H:%M:%S" ! \
+    video/x-raw,format=I420,width=640,height=480,framerate=30/1 ! \
     jpegenc ! jpegparse ! rtpjpegpay ! \
+    queue ! \
     udpsink host=$IP_ADDRESS port=$PORT
-
-
-

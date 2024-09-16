@@ -2,7 +2,7 @@
 
 
      
-These are GStreamer to send video stream through udp protocol
+These are GStreamer commands to send video stream through udp protocol
 
 ### Set up for camera use
 
