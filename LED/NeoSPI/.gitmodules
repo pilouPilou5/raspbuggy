@@ -1,4 +1,0 @@
-[submodule "subprojects/yacppl"]
-	path = subprojects/yacppl
-	url = https://gitlab.com/hannescam/yacppl
-	branch = main
