@@ -20,11 +20,6 @@ yes | sudo apt install libcamera-dev
 yes | sudo apt install gstreamer1.0-libcamera
 
 #activate spi peripherals
-echo "dtparam=spi=on" >>test_config.txt
-echo "dtoverlay=spi1-1cs" >>test_config.txt
-echo "dtoverlay=spi0-1cs" >>test_config.txt
-
-#build PWM
-gcc PWM/pwm.c -o PWM/pwm -lgpiod -lpthread
-
-#build LED
+echo "dtparam=spi=on" >> /boot/firmware/config.txt
+echo "dtoverlay=spi1-1cs" >> /boot/firmware/config.txt
+echo "dtoverlay=spi0-1cs" >> /boot/firmware/config.txt
