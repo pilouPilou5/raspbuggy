@@ -129,7 +129,7 @@ void main( int argc, char **argv) {
 
 
     // Check the number of arguments : "POC port_no"
-    int  server_port_no = 2000;
+    int  server_port_no = 5004;
     
 
     // Open socket in datagram mode (UDP). 17 is UDP number ( cf. file /etc/protocols )
@@ -157,16 +157,17 @@ void main( int argc, char **argv) {
   
 
     int  msg_length;
-    float *motor, *servo;
+    unsigned int *motor;
+    float *servo;
     char message[MAX_LENGTH];
-    motor = (float*)message;
+    motor = (unsigned int*)message;
     *motor = 0;
     servo = (float*)(message+sizeof(float));
     *servo = 0;
     char servo_str[100];
     //int pipe = open("/tmp/pipe", O_WRONLY);
-    pthread_create (&th1, NULL, servoControl, (void *)servo) ;
-    pthread_create (&th2, NULL, motorControl, (void *)motor) ;
+    //pthread_create (&th1, NULL, servoControl, (void *)servo) ;
+    //pthread_create (&th2, NULL, motorControl, (void *)motor) ;
     //printf ("Server started\n\n");
     do {
         // Read string from client through the dialogue socket
@@ -178,7 +179,7 @@ void main( int argc, char **argv) {
         //
         
         message[msg_length] = '\0';
-        //printf("motor : %f  servo : %f\n", motor, servo);
+        printf("motor : %u  servo : %f\n", *motor, *servo);
         //sprintf(python_cmd, "python3 set_servo.py %f", servo);
         //system(python_cmd);
         //sprintf(servo_str, "%f\n", servo);
