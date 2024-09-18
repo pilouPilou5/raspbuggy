@@ -1,3 +1,6 @@
+#include <gpiod.h>
+#include <unistd.h>
+#include <stdio.h>
 #include "pwm.h"
 
 void sendPWM(struct gpiod_line *line, float input) {
@@ -15,32 +18,30 @@ void sendPWM(struct gpiod_line *line, float input) {
     usleep(PWM_PERIOD - pulse_width);  // Wait for the remaining period time (low period)
 }
 
-gpiod_line* initPWM(int chip_number, int line_number){
-    struct gpiod_chip *chip;
-    struct gpiod_line *line;
-    int ret;
-    float* input = (float*)p;
+struct gpiod_chip* initChip(char* chip_number){
 
-    // Open the GPIO chip
+    struct gpiod_chip* chip;
     chip = gpiod_chip_open(chip_number);
     if (!chip) {
         perror("gpiod_chip_open");
-        return -1;
     }
+    return chip;
+}
 
-    // Get the GPIO line
+struct gpiod_line* initLine(struct gpiod_chip* chip, int line_number){
+
+    struct gpiod_line* line;
     line = gpiod_chip_get_line(chip, line_number);
     if (!line) {
         perror("gpiod_chip_get_line");
         gpiod_chip_close(chip);
-        return -1;
     }
 
     // Request the line as output
-    ret = gpiod_line_request_output(line, "servo-control", 0);
+    int ret = gpiod_line_request_output(line, "servo-control", 0);
     if (ret < 0) {
         perror("gpiod_line_request_output");
         gpiod_chip_close(chip);
-        return -1;
     }
+    return line;
 }
