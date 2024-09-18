@@ -1,6 +1,0 @@
-dtparam=spi=on
-dtoverlay=spi1-1cs
-dtoverlay=spi0-1cs
-dtparam=spi=on
-dtoverlay=spi1-1cs
-dtoverlay=spi0-1cs
