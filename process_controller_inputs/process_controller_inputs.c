@@ -1,4 +1,4 @@
-#include <stdbool>
+#include <stdbool.h>
 #include "process_controller_inputs.h"
 
 struct controller_inputs processControllerInputs(char* message){

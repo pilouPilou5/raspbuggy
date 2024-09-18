@@ -14,6 +14,6 @@ struct udp_socket_info{
 
 struct udp_socket_info initUdp(int port_no);
 
-void receiveUdp(int port_no, char* buffer);
+void receiveUdp(struct udp_socket_info socket, char* buffer);
 
 #endif

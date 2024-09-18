@@ -34,7 +34,7 @@ struct udp_socket_info initUdp(int port_no){
         exit(-1);
     }
 
-    struct udp_socket_info output = {udp_socket, server_adress, adress_length};
+    struct udp_socket_info output = {udp_socket, server_address, address_length};
     return output;
 }
 
@@ -43,7 +43,8 @@ void receiveUdp(struct udp_socket_info socket, char* message){
     int udp_socket = socket.udp_socket;
     struct sockaddr_in server_address = socket.server_address;
     socklen_t address_length = socket.address_length;
-
+    int msg_length;
+    
     msg_length = recvfrom(udp_socket, message, MAX_UDP_MESSAGE_LENGTH, 0, (struct sockaddr *)&server_address,  &address_length);
     message[msg_length] = '\0';
 }
