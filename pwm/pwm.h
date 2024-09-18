@@ -1,3 +1,6 @@
+#ifndef PWM_H
+#define PWM_H
+
 #include <gpiod.h>
 
 // Define the motor and servo min and max pulse lengths in microseconds
@@ -18,3 +21,5 @@ void sendPWM(struct gpiod_line *line, float input);
 struct gpiod_chip* initChip(char* chip_number);
 
 struct gpiod_line* initLine(struct gpiod_chip* chip, int line_number);
+
+#endif
