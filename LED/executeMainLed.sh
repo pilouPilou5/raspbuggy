@@ -20,7 +20,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Build successful!"
-echo " start of main" 
-"$BUILDDIR"/example/standarttest2 
+#echo " start of main" 
+#"$BUILDDIR"/example/standarttest2 
 
 
