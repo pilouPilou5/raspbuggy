@@ -30,15 +30,16 @@ int main(){
     *servo_command = 0;
     struct pwm_thread_input motor_thread_input = {motor_line, motor_command};
     struct pwm_thread_input servo_thread_input = {servo_line, servo_command};
-
+    printf("threads\n");
     pthread_create (&motor_thread, NULL, pwm_thread, (void *)&motor_thread_input);
     pthread_create (&servo_thread, NULL, pwm_thread, (void *)&servo_thread_input);
-
     struct udp_socket_info socket = initUdp(5002);
     char message[MAX_UDP_MESSAGE_LENGTH];
     struct controller_inputs inputs;
+    printf("while\n");
     while(1){
         receiveUdp(socket, message);
+        printf("%s\n", message);
         inputs = processControllerInputs(message);
         *motor_command = (inputs.rt-inputs.lt)/2;
         *servo_command = inputs.left_joystick_x_axis;
