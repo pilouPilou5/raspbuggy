@@ -19,6 +19,9 @@ yes | sudo apt install gstreamer1.0-gtk3
 yes | sudo apt install libcamera-dev
 yes | sudo apt install gstreamer1.0-libcamera
 
+#setup lib 
+export LD_LIBRARY_PATH=/home/pi/Documents/raspbuggy/LED/NeoSPI/NeoSPI_obj/subprojects/yacppl/src:$LD_LIBRARY_PATH
+
 #activate spi peripherals
 echo "dtparam=spi=on" >> /boot/firmware/config.txt
 echo "dtoverlay=spi1-1cs" >> /boot/firmware/config.txt
