@@ -1,8 +1,8 @@
 #ifndef GPIO_PWM_H
 #define GPIO_PWM_H
 
-// Fonction pour jouer un son depuis un fichier WAV via PWM
-// Les paramètres sont : le chemin du fichier WAV, le chip GPIO, et la ligne GPIO
+// Function to play a sound from a WAV file via PWM
+// The parameters are: the path to the WAV file, the GPIO chip, and the GPIO line
 void play_sound(const char *filename, const char *gpio_chip, int gpio_line);
 
 #endif // GPIO_PWM_H

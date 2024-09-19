@@ -1,5 +1,6 @@
 #!/bin/bash
-
+#this file is useless
+echo "this file is useless" 
 cd NeoSPI
 BUILDDIR="NeoSPI_obj"
 
@@ -20,7 +21,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Build successful!"
-echo " start of main" 
-"$BUILDDIR"/example/standarttest2 
+#echo " start of main" 
+#"$BUILDDIR"/example/standarttest2 
 
 
