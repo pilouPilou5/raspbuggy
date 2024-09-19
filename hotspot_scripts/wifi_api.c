@@ -32,17 +32,3 @@ void delete_hotspot(char name[]) {
     sprintf(cmd, "sudo nmcli connection delete %s", name);
     system(cmd);
 }
-
-/* Demo usage */
-int main() {
-    char ssid[] = "ssid";
-    char name[] = "name";
-    char pass[] = "00000000";
-
-    printf("Start\n\n");
-    delete_hotspot(name);
-    generate_hotspot(ssid, name, pass);
-    printf("End\n\n");
-    return 0;
-}
-/**/

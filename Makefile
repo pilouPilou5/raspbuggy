@@ -1,8 +1,8 @@
-bin/main: obj/main.o obj/pwm.o obj/receive_udp.o obj/process_controller_inputs.o
-	gcc -o bin/main obj/main.o obj/pwm.o obj/receive_udp.o obj/process_controller_inputs.o -lgpiod -lpthread
+bin/main: obj/main.o obj/pwm.o obj/receive_udp.o obj/process_controller_inputs.o obj/wifi_api.o
+	gcc -o bin/main obj/main.o obj/pwm.o obj/receive_udp.o obj/process_controller_inputs.o obj/wifi_api.o -lgpiod -lpthread
 
-obj/main.o: main.c pwm/pwm.h receive_udp/receive_udp.h receive_udp/receive_udp.c process_controller_inputs/process_controller_inputs.h process_controller_inputs/process_controller_inputs.c
-	gcc -o obj/main.o -I ./pwm -I ./receive_udp -I ./process_controller_inputs -c main.c
+obj/main.o: main.c pwm/pwm.h receive_udp/receive_udp.h receive_udp/receive_udp.c process_controller_inputs/process_controller_inputs.h process_controller_inputs/process_controller_inputs.c hotspot_scripts/wifi_api.c hotspot_scripts/wifi_api.h
+	gcc -o obj/main.o -I ./pwm -I ./receive_udp -I ./process_controller_inputs -I ./hotspot_scripts -c main.c
 
 obj/pwm.o: pwm/pwm.c pwm/pwm.h
 	gcc -o obj/pwm.o -I ./pwm -lgpiod -c pwm/pwm.c
@@ -12,6 +12,9 @@ obj/receive_udp.o: receive_udp/receive_udp.c receive_udp/receive_udp.h
 
 obj/process_controller_inputs.o: process_controller_inputs/process_controller_inputs.c process_controller_inputs/process_controller_inputs.h
 	gcc -o obj/process_controller_inputs.o -I ./process_controller_inputs -c process_controller_inputs/process_controller_inputs.c
+
+obj/wifi_api.o: hotspot_scripts/wifi_api.c hotspot_scripts/wifi_api.h
+	gcc -o obj/wifi_api.o -I ./hotspot_scripts -c hotspot_scripts/wifi_api.c
 
 clean:
 	rm obj/*
