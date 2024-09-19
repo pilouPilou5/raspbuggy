@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdio.h>
 #include "process_controller_inputs.h"
 
 struct controller_inputs processControllerInputs(char* message){
@@ -21,12 +22,15 @@ struct controller_inputs processControllerInputs(char* message){
     inputs.left_joystick = buttons & 1<<13;
     inputs.right_joystick = buttons & 1<<14;
 
-    inputs.left_joystick_x_axis = *(float*)message+32;
-    inputs.left_joystick_x_axis = *(float*)message+2*32;
-    inputs.left_joystick_x_axis = *(float*)message+3*32;
-    inputs.left_joystick_x_axis = *(float*)message+4*32;
-    inputs.lt = *(float*)message+5*32;
-    inputs.rt = *(float*)message+6*32;
+    inputs.left_joystick_x_axis = *(float*)(message+sizeof(float));
+    inputs.left_joystick_y_axis = *(float*)(message+2*sizeof(float));
+    inputs.right_joystick_x_axis = *(float*)(message+3*sizeof(float));
+    inputs.right_joystick_y_axis = *(float*)(message+4*sizeof(float));
+    inputs.lt = *(float*)(message+5*sizeof(float));
+    inputs.rt = *(float*)(message+6*sizeof(float));
+
+    printf("joystick: %f  lt: %f  rt: %f\n", inputs.left_joystick_x_axis, inputs.lt, inputs.rt);
+    //printf("%f", *(float*)message);
 
     return inputs;
 }
