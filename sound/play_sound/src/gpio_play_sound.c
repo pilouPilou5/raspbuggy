@@ -25,36 +25,36 @@ void play_sound(const char *filename, const char *gpio_chip, int gpio_line) {
     long on_time_ns, off_time_ns;
     long start_time, current_time;
 
-    // Ouvrir le fichier audio WAV
+    // Open the WAV audio file
     SF_INFO sfinfo;
     SNDFILE *sndfile = sf_open(filename, SFM_READ, &sfinfo);
     if (!sndfile) {
-        fprintf(stderr, "Erreur: impossible d'ouvrir le fichier audio %s\n", filename);
+        fprintf(stderr, "Error: unable to open audio file %s\n", filename);
         return;
     }
 
-    // Vérifier que le fichier audio est en format mono
+    // Check that the audio file is in mono format
     if (sfinfo.channels != 1) {
-        fprintf(stderr, "Erreur: le fichier audio doit être en mono.\n");
+        fprintf(stderr, "Error: audio file must be mono.\n");
         sf_close(sndfile);
         return;
     }
 
-    // Allouer un buffer pour les échantillons audio
+    // Allocate a buffer for audio samples
     float buffer[sfinfo.frames];
 
-    // Lire les échantillons audio
+    // Read the audio samples
     sf_read_float(sndfile, buffer, sfinfo.frames);
     sf_close(sndfile);
 
-    // Ouvrir le chip GPIO
+    // Open the GPIO chip
     chip = gpiod_chip_open(gpio_chip);
     if (!chip) {
         perror("gpiod_chip_open");
         return;
     }
 
-    // Obtenir la ligne GPIO
+    // Get the GPIO line
     line = gpiod_chip_get_line(chip, gpio_line);
     if (!line) {
         perror("gpiod_chip_get_line");
@@ -62,12 +62,12 @@ void play_sound(const char *filename, const char *gpio_chip, int gpio_line) {
         return;
     }
 
-    // Initialiser la configuration de la ligne GPIO
+    // Initialize the GPIO line configuration
     memset(&config, 0, sizeof(config));
     config.consumer = "audio_pwm";
     config.request_type = GPIOD_LINE_REQUEST_DIRECTION_OUTPUT;
 
-    // Demander l'accès à la ligne GPIO
+    // Request access to the GPIO line
     ret = gpiod_line_request(line, &config, 0);
     if (ret < 0) {
         perror("gpiod_line_request");
@@ -75,21 +75,21 @@ void play_sound(const char *filename, const char *gpio_chip, int gpio_line) {
         return;
     }
 
-    // Boucle pour envoyer les données audio en signal PWM
+    // Loop to send audio data as PWM signal
     for (long i = 0; i < sfinfo.frames; i++) {
         float sample = buffer[i];
         float duty_cycle = ((sample + 1.0) / 2.0) * AMPLITUDE_MAX;
         on_time_ns = (duty_cycle / AMPLITUDE_MAX) * time_step_ns;
         off_time_ns = time_step_ns - on_time_ns;
 
-        // Activer la broche (ON)
+        // Turn the pin ON
         gpiod_line_set_value(line, 1);
         start_time = get_time_ns();
         do {
             current_time = get_time_ns();
         } while ((current_time - start_time) < on_time_ns);
 
-        // Désactiver la broche (OFF)
+        // Turn the pin OFF
         gpiod_line_set_value(line, 0);
         start_time = get_time_ns();
         do {
@@ -97,7 +97,7 @@ void play_sound(const char *filename, const char *gpio_chip, int gpio_line) {
         } while ((current_time - start_time) < off_time_ns);
     }
 
-    // Libérer les ressources GPIO
+    // Release the GPIO resources
     gpiod_line_release(line);
     gpiod_chip_close(chip);
 }
