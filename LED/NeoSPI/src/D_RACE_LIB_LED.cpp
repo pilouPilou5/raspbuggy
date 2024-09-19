@@ -37,19 +37,17 @@ void pixelSet(int g,int r,int b,int i){
 
 void blink(uint8_t g, uint8_t r, uint8_t b, int interval, int repetitions) {
     for (int i = 0; i < repetitions; i++) {
-        // Allumer les LEDs avec la couleur spécifiée
-        for (int j = 0; j < pix; j++) {
+                for (int j = 0; j < pix; j++) {
             strip.setPixelRGB(r, g, b, j);
         }
         strip.show();
-        usleep(interval * 1000);  // Pause pour "interval" millisecondes
+        usleep(interval * 1000);  
 
-        // Éteindre les LEDs
         for (int j = 0; j < pix; j++) {
             strip.setPixelRGB(0, 0, 0, j);
         }
         strip.show();
-        usleep(interval * 1000);  // Pause pour "interval" millisecondes
+        usleep(interval * 1000);  
     }
 }
 

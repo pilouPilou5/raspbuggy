@@ -29,7 +29,7 @@ struct controller_inputs processControllerInputs(char* message){
     inputs.lt = *(float*)(message+5*sizeof(float));
     inputs.rt = *(float*)(message+6*sizeof(float));
 
-    printf("joystick: %f  lt: %f  rt: %f\n", inputs.left_joystick_x_axis, inputs.lt, inputs.rt);
+    //printf("joystick: %f  lt: %f  rt: %f\n", inputs.left_joystick_x_axis, inputs.lt, inputs.rt);
     //printf("%f", *(float*)message);
 
     return inputs;

@@ -1,5 +1,6 @@
 #!/bin/bash
-
+#this file is useless
+echo "this file is useless" 
 cd NeoSPI
 BUILDDIR="NeoSPI_obj"
 

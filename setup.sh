@@ -3,10 +3,10 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo $SCRIPT_DIR
 
-# Fonction pour installer la première partie
+# Function to install the first part (LED)
 install_LED() {
     echo "Installation of LED"
-    #update
+    # Update
     yes | sudo apt update
     yes | sudo apt upgrade
 
@@ -14,7 +14,6 @@ install_LED() {
     yes | sudo apt install ninja-build
     yes | sudo apt install libyaml-cpp-dev
     yes | sudo apt install libsndfile-dev
-
 
     cd $SCRIPT_DIR/LED/NeoSPI
 
@@ -24,33 +23,43 @@ install_LED() {
     echo "Build lib LED successful!"
     cd $SCRIPT_DIR
 
-    #setup lib 
-    export LD_LIBRARY_PATH=$SCRIPT_DIR/LED/NeoSPI/NeoSPI_obj/subprojects/yacppl/src
-    export LD_LIBRARY_PATH=$SCRIPT_DIR/sound/play_sound/src/lib
+    echo "$SCRIPT_DIR/LED/NeoSPI/NeoSPI_obj/subprojects/yacppl/src" | sudo tee /etc/ld.so.conf.d/raspbuggy.conf
+    sudo ldconfig
 
-    #activate spi peripherals
-    echo "dtparam=spi=on" >> /boot/firmware/config.txt
-    echo "dtoverlay=spi1-1cs" >> /boot/firmware/config.txt
-    echo "dtoverlay=spi0-1cs" >> /boot/firmware/config.txt
+    # Activate SPI peripherals
+    #if ! grep -q "^dtparam=spi=on" /boot/firmware/config.txt; then
+    #    echo "dtparam=spi=on" >> /boot/firmware/config.txt
+    #fi
+
+
+    if ! grep -q "^dtoverlay=spi0-2cs" /boot/firmware/config.txt; then
+        echo "dtoverlay=spi0-2cs" >> /boot/firmware/config.txt
+    fi
+
+
+    source ~/.bashrc
+
 }
 
-# Fonction pour installer la deuxième partie
+# Function to install the second part (sound)
 install_sound() {
     echo "Installation of sound"
-    #update
+    # Update
     yes | sudo apt update
     yes | sudo apt upgrade
-    #install gpiod library
+    # Install gpiod library
     yes | sudo apt install libgpiod-dev
+
+    echo "$SCRIPT_DIR/sound/play_sound/src/lib" | sudo tee -a /etc/ld.so.conf.d/raspbuggy.conf
+    sudo ldconfig
 }
 
-
-# Fonction pour tout installer
+# Function to install everything
 install_all() {
-    echo "Installation complète..."
+    echo "Complete installation..."
     install_LED
     install_sound
-    #install gstream and camera drivers
+    # Install gstreamer and camera drivers
     yes | sudo apt install libx264-dev libjpeg-dev
     yes | sudo apt install libgstreamer1.0-dev
     yes | sudo apt install libgstreamer-plugins-base1.0-dev
@@ -63,17 +72,17 @@ install_all() {
     yes | sudo apt install gstreamer1.0-libcamera
 }
 
-# Fonction d'affichage de l'aide
-afficher_aide() {
-    echo "Utilisation : $0 [-a] [-l] [-s] [-h]"
-    echo "Options :"
+# Function to display help
+display_help() {
+    echo "Usage: $0 [-a] [-l] [-s] [-h]"
+    echo "Options:"
     echo "  -a    install all"
     echo "  -l    only install LED"
     echo "  -s    only install sound"
     echo "  -h    help"
 }
 
-# Lecture des options
+# Read options
 while getopts "alsh" opt; do
     case $opt in
         a)
@@ -86,23 +95,17 @@ while getopts "alsh" opt; do
             install_sound
             ;;
         h)
-            afficher_aide
+            display_help
             exit 0
             ;;
         *)
-            afficher_aide
+            display_help
             exit 1
             ;;
     esac
 done
 
-# Si aucune option n'est passée, afficher l'aide
+# If no option is passed, display help
 if [ $OPTIND -eq 1 ]; then
-    afficher_aide
+    display_help
 fi
-
-
-
-
-
-

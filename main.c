@@ -24,6 +24,7 @@ int main(){
     generate_hotspot("raspbuggy", "raspbuggy", "12345678");
 
     pthread_t motor_thread, servo_thread;
+
     float motor_command[1], servo_command[1];
 
     struct gpiod_chip* chip = initChip(GPIO_CHIP);
@@ -41,13 +42,13 @@ int main(){
     struct udp_socket_info socket = initUdp(5002);
     char message[MAX_UDP_MESSAGE_LENGTH];
     struct controller_inputs inputs;
-
+    
     while(1){
         receiveUdp(socket, message);
-        printf("%s\n", message);
         inputs = processControllerInputs(message);
         *motor_command = (inputs.rt-inputs.lt)/2;
-        *servo_command = inputs.left_joystick_x_axis;
+        *servo_command = 0.28*inputs.left_joystick_x_axis;
+        printf("motor: %f  servo: %f\n", *motor_command, *servo_command);
     }
     return 0;
 }
