@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /home/pi/Documents/raspbuggy/LED/NeoSPI
+cd NeoSPI
 BUILDDIR="NeoSPI_obj"
 
 # Exécution de la commande meson setup

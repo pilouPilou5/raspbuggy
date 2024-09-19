@@ -9,4 +9,4 @@ deps = [
 
 inc = include_directories('include')
 
-lib = shared_library('NeoSPI', neospi_sources, install: true, include_directories : inc, dependencies : deps)
+lib = shared_library('led', neospi_sources, install: true, include_directories : inc, dependencies : deps)

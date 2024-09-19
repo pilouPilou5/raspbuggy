@@ -1,5 +1,5 @@
 ﻿  app_windows.cpp
-C:\Users\paulj\Desktop\raspbuggy\app_windows\app_windows\app_windows.cpp(50,47): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
-C:\Users\paulj\Desktop\raspbuggy\app_windows\app_windows\app_windows.cpp(51,60): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
-C:\Users\paulj\Desktop\raspbuggy\app_windows\app_windows\app_windows.cpp(52,62): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\Users\paulj\Desktop\raspbuggy\app_windows\app_windows\app_windows.cpp(52,30): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\Users\paulj\Desktop\raspbuggy\app_windows\app_windows\app_windows.cpp(55,52): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+  LINK : C:\Users\paulj\Desktop\raspbuggy\app_windows\x64\Debug\app_windows.exe introuvable ou non généré par la dernière édition de liens incrémentielle ; édition de liens complète en cours
   app_windows.vcxproj -> C:\Users\paulj\Desktop\raspbuggy\app_windows\x64\Debug\app_windows.exe
