@@ -22,7 +22,8 @@ int main()
     }
 
     //create UDP socket
-    std::string hostname{ "10.214.10.140" };
+    //std::string hostname{ "10.214.10.140" };
+    std::string hostname{ "192.168.196.68" };
     uint16_t port = 5002;
 
     SOCKET sock = ::socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
