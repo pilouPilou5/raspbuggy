@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <gst/gst.h>
 
-void *gst_thread_send( void *arg){
+void gst_thread_send(void){
     
     GstElement *pipeline;
     GstBus *bus;

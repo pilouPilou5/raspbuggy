@@ -9,7 +9,7 @@
 
 
 void *gst_thread_test(void *arg);
-void *gst_thread_send(void *arg);
+void gst_thread_send(void);
 
 
 
