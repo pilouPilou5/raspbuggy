@@ -44,7 +44,7 @@ void receiveUdp(struct udp_socket_info socket, char* message){
     struct sockaddr_in server_address = socket.server_address;
     socklen_t address_length = socket.address_length;
     int msg_length;
-    
     msg_length = recvfrom(udp_socket, message, MAX_UDP_MESSAGE_LENGTH, 0, (struct sockaddr *)&server_address,  &address_length);
     message[msg_length] = '\0';
+    printf("%s", message);
 }
