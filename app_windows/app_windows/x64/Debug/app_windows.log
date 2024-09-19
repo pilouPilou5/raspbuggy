@@ -1,1 +1,5 @@
-﻿  app_windows.vcxproj -> C:\Users\paulj\Desktop\raspbuggy\app_windows\x64\Debug\app_windows.exe
+﻿  app_windows.cpp
+C:\Users\paulj\Desktop\raspbuggy\app_windows\app_windows\app_windows.cpp(50,47): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\Users\paulj\Desktop\raspbuggy\app_windows\app_windows\app_windows.cpp(51,60): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+C:\Users\paulj\Desktop\raspbuggy\app_windows\app_windows\app_windows.cpp(52,62): warning C4244: '=' : conversion de 'double' en 'float', perte possible de données
+  app_windows.vcxproj -> C:\Users\paulj\Desktop\raspbuggy\app_windows\x64\Debug\app_windows.exe
