@@ -22,6 +22,8 @@ void *pwmThread(void* p){
 }
 
 void *streamThread(void* p){
+    printf("in thread\n");
+    gst_init(NULL, NULL);
     gst_thread_send();
 }
 
@@ -43,7 +45,7 @@ int main(){
 
     pthread_create(&motor_thread, NULL, pwmThread, (void *)&motor_thread_input);
     pthread_create(&servo_thread, NULL, pwmThread, (void *)&servo_thread_input);
-
+    printf("camera\n");
     pthread_create(&stream_thread, NULL, streamThread, NULL);
 
     struct udp_socket_info socket = initUdp(5002);
