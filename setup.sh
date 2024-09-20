@@ -2,19 +2,22 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo $SCRIPT_DIR
+install_common_package(){
+    yes | sudo apt update
+    yes | sudo apt upgrade
+}
 
 # Function to install the first part (LED)
 install_LED() {
-    echo "Installation of LED"
-    # Update
-    yes | sudo apt update
-    yes | sudo apt upgrade
+    install_common_package
 
+    echo "Installation of LED"
     yes | sudo apt install meson
     yes | sudo apt install ninja-build
     yes | sudo apt install libyaml-cpp-dev
     yes | sudo apt install libsndfile-dev
 
+    #build of lib
     cd $SCRIPT_DIR/LED/NeoSPI
 
     BUILDDIR="NeoSPI_obj"
@@ -26,37 +29,30 @@ install_LED() {
     echo "$SCRIPT_DIR/LED/NeoSPI/NeoSPI_obj/subprojects/yacppl/src" | sudo tee /etc/ld.so.conf.d/raspbuggy.conf
     sudo ldconfig
 
-    # Activate SPI peripherals
-    #if ! grep -q "^dtparam=spi=on" /boot/firmware/config.txt; then
-    #    echo "dtparam=spi=on" >> /boot/firmware/config.txt
-    #fi
-
-
     if ! grep -q "^dtoverlay=spi0-2cs" /boot/firmware/config.txt; then
         echo "dtoverlay=spi0-2cs" >> /boot/firmware/config.txt
     fi
 
-
     source ~/.bashrc
-
+    echo -e "\e[32mLib Led sucesfully installed\e[0m"
 }
 
 # Function to install the second part (sound)
 install_sound() {
+    install_common_package
     echo "Installation of sound"
-    # Update
-    yes | sudo apt update
-    yes | sudo apt upgrade
     # Install gpiod library
     yes | sudo apt install libgpiod-dev
 
     echo "$SCRIPT_DIR/sound/play_sound/src/lib" | sudo tee -a /etc/ld.so.conf.d/raspbuggy.conf
     sudo ldconfig
+    echo -e "\e[32mLib sound sucesfully installed\e[0m"
 }
 
 # Function to install everything
 install_all() {
     echo "Complete installation..."
+    install_common_package
     install_LED
     install_sound
     # Install gstreamer and camera drivers

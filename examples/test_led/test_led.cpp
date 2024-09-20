@@ -3,7 +3,7 @@
 
 int main(int argc, char const *argv[])
 {
-    ledInit(8,0);
+    ledInit(8,0);//gpio 10 pin 19
     //sleep(5) ;
     rainbow3(5);
     colorWipe(0,0,0,50);
