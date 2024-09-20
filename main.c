@@ -67,7 +67,7 @@ int main(){
     pthread_create(&servo_thread, NULL, pwmThread, (void *)&servo_thread_input);
 
     //camera
-    //pthread_create(&stream_thread, NULL, streamThread, NULL);
+    pthread_create(&stream_thread, NULL, streamThread, NULL);
 
     //sound
     char filename[100];
@@ -83,7 +83,7 @@ int main(){
         receiveUdp(socket, message);
         inputs = processControllerInputs(message);
         *motor_command = (inputs.rt-inputs.lt)/2;
-        *servo_command = 0.28*inputs.left_joystick_x_axis;
+        *servo_command = -0.28*inputs.left_joystick_x_axis;
         if(inputs.a){
             if(!sound_playing){
                 sprintf(filename, "sound/files/liberty_city_horn.wav");
