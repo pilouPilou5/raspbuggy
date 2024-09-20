@@ -21,7 +21,6 @@ void gst_thread_send(void){
     pipeline = gst_parse_launch( command, NULL);
     if (!pipeline) {
         g_printerr("Failed to create pipeline.\n");
-        return NULL;
     }
 
     // Set the pipeline to the PLAYING state
@@ -29,7 +28,6 @@ void gst_thread_send(void){
     if (ret == GST_STATE_CHANGE_FAILURE) {
         g_printerr("Failed to set pipeline to playing state.\n");
         gst_object_unref(pipeline);
-        return NULL;
     }
 
     // Get the bus and wait for EOS or ERROR message
@@ -55,6 +53,4 @@ void gst_thread_send(void){
     gst_object_unref(bus);
     gst_element_set_state(pipeline, GST_STATE_NULL);
     gst_object_unref(pipeline);
-
-    return NULL;
 }
