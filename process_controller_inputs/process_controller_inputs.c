@@ -31,7 +31,7 @@ struct controller_inputs processControllerInputs(char* message){
 
     //printf("joystick: %f  lt: %f  rt: %f\n", inputs.left_joystick_x_axis, inputs.lt, inputs.rt);
     //printf("%f", *(float*)message);
-    printf("%d\n", buttons);
+    //printf("%d\n", buttons);
 
     return inputs;
 }

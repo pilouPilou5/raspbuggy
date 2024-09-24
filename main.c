@@ -29,7 +29,6 @@ void *pwmThread(void* p){
 }
 
 void *streamThread(void* p){
-    printf("in thread\n");
     gst_init(NULL, NULL);
     gst_thread_send();
 }
@@ -39,15 +38,13 @@ void *soundThread(void* p){
     char* filename = input.filename;
     bool* sound_playing = input.sound_playing;
     *sound_playing = 1;
-
     play_sound(filename, GPIO_CHIP, SOUND_LINE);
-
     *sound_playing = 0;
 }
 
 int main(){
     //hotspot
-    generate_hotspot("raspbuggy", "raspbuggy", "12345678");
+    //generate_hotspot("raspbuggy", "raspbuggy", "12345678");
 
     //pwm
     pthread_t motor_thread, servo_thread, stream_thread, sound_thread;
