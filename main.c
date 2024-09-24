@@ -42,6 +42,10 @@ void *soundThread(void* p){
     *sound_playing = 0;
 }
 
+void *ledThread(void* p){
+    system("bin/rainbow");
+}
+
 int main(){
     //hotspot
     //generate_hotspot("raspbuggy", "raspbuggy", "12345678");
@@ -70,6 +74,10 @@ int main(){
     char filename[100];
     bool sound_playing;
     struct sound_thread_input sound_input = {filename, &sound_playing};
+
+    //led
+    pthread_t led_thread;
+    pthread_create(&led_thread, NULL, ledThread, NULL);
 
     //udp reception
     struct udp_socket_info socket = initUdp(5004);
