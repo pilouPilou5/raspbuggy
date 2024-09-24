@@ -1,15 +1,22 @@
 #include <gpiod.h>
 #include <stdio.h>
 #include <pthread.h>
+#include <stdbool.h>
 #include "pwm.h"
 #include "receive_udp.h"
 #include "process_controller_inputs.h"
 #include "wifi_api.h"
 #include "threads.h"
+#include "gpio_play_sound.h"
 
 struct pwm_thread_input{
     struct gpiod_line* line;
     float* command;
+};
+
+struct sound_thread_input{
+    char* filename;
+    bool* sound_playing;
 };
 
 void *pwmThread(void* p){
@@ -22,15 +29,25 @@ void *pwmThread(void* p){
 }
 
 void *streamThread(void* p){
-    printf("in thread\n");
     gst_init(NULL, NULL);
     gst_thread_send();
 }
 
-int main(){
-    generate_hotspot("raspbuggy", "raspbuggy", "12345678");
+void *soundThread(void* p){
+    struct sound_thread_input input = *(struct sound_thread_input*)p;
+    char* filename = input.filename;
+    bool* sound_playing = input.sound_playing;
+    *sound_playing = 1;
+    play_sound(filename, GPIO_CHIP, SOUND_LINE);
+    *sound_playing = 0;
+}
 
-    pthread_t motor_thread, servo_thread, stream_thread;
+int main(){
+    //hotspot
+    //generate_hotspot("raspbuggy", "raspbuggy", "12345678");
+
+    //pwm
+    pthread_t motor_thread, servo_thread, stream_thread, sound_thread;
 
     float motor_command[1], servo_command[1];
 
@@ -45,10 +62,17 @@ int main(){
 
     pthread_create(&motor_thread, NULL, pwmThread, (void *)&motor_thread_input);
     pthread_create(&servo_thread, NULL, pwmThread, (void *)&servo_thread_input);
-    printf("camera\n");
+
+    //camera
     pthread_create(&stream_thread, NULL, streamThread, NULL);
 
-    struct udp_socket_info socket = initUdp(5002);
+    //sound
+    char filename[100];
+    bool sound_playing;
+    struct sound_thread_input sound_input = {filename, &sound_playing};
+
+    //udp reception
+    struct udp_socket_info socket = initUdp(5004);
     char message[MAX_UDP_MESSAGE_LENGTH];
     struct controller_inputs inputs;
     
@@ -56,8 +80,13 @@ int main(){
         receiveUdp(socket, message);
         inputs = processControllerInputs(message);
         *motor_command = (inputs.rt-inputs.lt)/2;
-        *servo_command = 0.28*inputs.left_joystick_x_axis;
-        printf("motor: %f  servo: %f\n", *motor_command, *servo_command);
+        *servo_command = -0.28*inputs.left_joystick_x_axis;
+        if(inputs.a){
+            if(!sound_playing){
+                sprintf(filename, "sound/files/liberty_city_horn.wav");
+                pthread_create(&sound_thread, NULL, soundThread, (void *)&sound_input);
+            }
+        }
     }
     return 0;
 }
