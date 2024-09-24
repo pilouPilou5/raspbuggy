@@ -23,8 +23,8 @@ int main()
 
     //create UDP socket
     //std::string hostname{ "10.214.10.140" };
-    std::string hostname{ "192.168.196.68" };
-    uint16_t port = 5002;
+    std::string hostname{ "10.214.0.1" };
+    uint16_t port = 5004;
 
     SOCKET sock = ::socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (sock == INVALID_SOCKET) {
@@ -45,14 +45,16 @@ int main()
     float left_trigger, right_trigger;
     int error;
     int bytes_sent;
+    int buttons;
     while (1) {
         error = XInputGetState(0, &state);
         if (error == ERROR_SUCCESS) {
             joystick = state.Gamepad.sThumbLX / 32768.;
             left_trigger = (state.Gamepad.bLeftTrigger - 127) / 128.;
             right_trigger = (state.Gamepad.bRightTrigger - 127) / 128.;
-            cout << "left trigger : " << left_trigger << "    right trigger : " << right_trigger << "   joystick : " << joystick << endl;
-            buf[0] = 0;
+            buttons = !!(state.Gamepad.wButtons & XINPUT_GAMEPAD_X) + 2 * !!(state.Gamepad.wButtons & XINPUT_GAMEPAD_Y) + 4 * !!(state.Gamepad.wButtons & XINPUT_GAMEPAD_A) + 8 * !!(state.Gamepad.wButtons & XINPUT_GAMEPAD_B);
+            cout << "left trigger : " << left_trigger << "    right trigger : " << right_trigger << "   joystick : " << joystick << "   buttons : " << buttons << endl;
+            buf[0] = *(float*)&buttons;
             buf[1] = joystick;
             buf[2] = 0;
             buf[3] = 0;
