@@ -30,7 +30,7 @@ install_LED() {
     sudo ldconfig
 
     if ! grep -q "^dtoverlay=spi0-2cs" /boot/firmware/config.txt; then
-        echo "dtoverlay=spi0-2cs" >> /boot/firmware/config.txt
+        sudo echo "dtoverlay=spi0-2cs" >> /boot/firmware/config.txt
     fi
 
     source ~/.bashrc
