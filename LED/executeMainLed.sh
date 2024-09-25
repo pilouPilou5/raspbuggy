@@ -1,6 +1,7 @@
 #!/bin/bash
-
-cd /home/pi/Documents/VroumVroum/D_RACE/LED/NeoSPI
+#this file is useless
+echo "this file is useless" 
+cd NeoSPI
 BUILDDIR="NeoSPI_obj"
 
 # Exécution de la commande meson setup
@@ -20,7 +21,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Build successful!"
-echo " start of main" 
-"$BUILDDIR"/example/standarttest2 
+#echo " start of main" 
+#"$BUILDDIR"/example/standarttest2 
 
 

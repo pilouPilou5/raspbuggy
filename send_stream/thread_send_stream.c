@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include <gst/gst.h>
 
-void *gst_thread_send( void *arg){
-    
+void gst_thread_send(void){
     GstElement *pipeline;
     GstBus *bus;
     GstMessage *msg;
@@ -16,12 +15,10 @@ void *gst_thread_send( void *arg){
     snprintf(command, sizeof(command),
     "libcamerasrc ! video/x-raw,format=I420,width=640,height=480,framerate=30/1 ! jpegenc ! jpegparse ! rtpjpegpay ! queue ! udpsink host=%s port=%s",
     IP_ADDRESS, PORT);
-
     //Create pipeline
     pipeline = gst_parse_launch( command, NULL);
     if (!pipeline) {
         g_printerr("Failed to create pipeline.\n");
-        return NULL;
     }
 
     // Set the pipeline to the PLAYING state
@@ -29,9 +26,7 @@ void *gst_thread_send( void *arg){
     if (ret == GST_STATE_CHANGE_FAILURE) {
         g_printerr("Failed to set pipeline to playing state.\n");
         gst_object_unref(pipeline);
-        return NULL;
     }
-
     // Get the bus and wait for EOS or ERROR message
     bus = gst_element_get_bus(pipeline);
     msg = gst_bus_timed_pop_filtered(bus, GST_CLOCK_TIME_NONE, GST_MESSAGE_ERROR | GST_MESSAGE_EOS);
@@ -55,6 +50,4 @@ void *gst_thread_send( void *arg){
     gst_object_unref(bus);
     gst_element_set_state(pipeline, GST_STATE_NULL);
     gst_object_unref(pipeline);
-
-    return NULL;
 }
