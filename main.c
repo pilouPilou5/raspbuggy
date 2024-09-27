@@ -48,7 +48,7 @@ void *ledThread(void* p){
 
 int main(){
     //hotspot
-    //generate_hotspot("raspbuggy", "raspbuggy", "12345678");
+    generate_hotspot("raspbuggy", "raspbuggy", "12345678");
 
     //pwm
     pthread_t motor_thread, servo_thread, stream_thread, sound_thread;
