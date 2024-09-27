@@ -2,9 +2,9 @@
 #include <time.h>
 
 int main(int argc, char const *argv[]){
-    ledInit(32 ,0);//gpio 10 pin 19
+    ledInit(8,0);//gpio 10 pin 19
     while(1){
-        rainbow3(10);
+        blink(0, 255, 0,500,1 );
     }
     return 0;
 }
